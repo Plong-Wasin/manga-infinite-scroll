@@ -1,9 +1,11 @@
 // ==UserScript==
 // @name         mangaInfiniteScrollBundle
 // @namespace    https://github.com/plong-wasin
-// @version      0.1
+// @version      0.2
 // @description  Read manga with infinite scroll
 // @author       Plong-Wasin
+// @updateURL    https://github.com/Plong-Wasin/manga-infinite-scroll/raw/main/mangaInfiniteScrollBundle.meta.js
+// @downloadURL  https://github.com/Plong-Wasin/manga-infinite-scroll/raw/main/mangaInfiniteScrollBundle.user.js
 // @match        https://*/*
 // @grant        none
 // ==/UserScript==
@@ -48,7 +50,7 @@
             });
         });
     }
-    function manga(nextChapterSelector, containerSelector, imageBlockSelector) {
+    function manga({ nextChapterSelector, containerSelector, imageBlockSelector = "", callback = () => void 0, }) {
         const containerEl = document.querySelector(containerSelector);
         let loading = false;
         let nextChapterEl = document.querySelector(nextChapterSelector);
@@ -67,7 +69,9 @@
                         const doc = parser.parseFromString(text, "text/html");
                         const divEls = doc.querySelectorAll(`${containerSelector} ${imageBlockSelector}`);
                         for (const divEl of divEls) {
-                            const img = divEl.querySelector(`img`) || divEl;
+                            const img = divEl.querySelector(`img`) ||
+                                divEl;
+                            callback(divEl, img);
                             if (img) {
                                 img.loading = "lazy";
                                 containerEl.appendChild(img);
@@ -91,20 +95,113 @@
     function init() {
         return {
             mangakakalot: () => {
-                manga(".btn-navigation-chap .back", ".container-chapter-reader", "img");
+                const params = {
+                    nextChapterSelector: ".btn-navigation-chap .back",
+                    containerSelector: ".container-chapter-reader",
+                    imageBlockSelector: "img",
+                    callback(blockElement, imageElement) {
+                        const selectElement = document.querySelector(".pn-op-sv-cbb-content-margin");
+                        const selectValue = selectElement?.value;
+                        if (selectValue) {
+                            imageElement.style.marginTop = `${selectValue}px`;
+                        }
+                    },
+                };
+                manga(params);
             },
             readmanganato: () => {
-                manga(".navi-change-chapter-btn-next", ".container-chapter-reader", "img");
+                const params = {
+                    nextChapterSelector: ".navi-change-chapter-btn-next",
+                    containerSelector: ".container-chapter-reader",
+                    imageBlockSelector: "img",
+                    callback(blockElement, imageElement) {
+                        const selectElement = document.querySelector(".server-cbb-content-margin");
+                        const selectValue = selectElement?.value;
+                        if (selectValue) {
+                            imageElement.style.marginTop = `${selectValue}px`;
+                        }
+                    },
+                };
+                manga(params);
             },
             _365manga: () => {
-                manga(".nav-next a", ".reading-content", ".page-break.no-gaps");
+                const params = {
+                    nextChapterSelector: ".nav-next a",
+                    containerSelector: ".reading-content",
+                    imageBlockSelector: ".page-break.no-gaps",
+                };
+                manga(params);
             },
             mangauptocats: () => {
-                manga(".nav-next a", ".reading-content", ".page-break");
+                const params = {
+                    nextChapterSelector: ".nav-next a",
+                    containerSelector: ".reading-content",
+                    imageBlockSelector: ".page-break",
+                };
+                manga(params);
             },
             rh2plusmanga: () => {
-                manga(".btn.next_page", ".text-left p code", "img");
-            }
+                const params = {
+                    nextChapterSelector: ".btn.next_page",
+                    containerSelector: ".text-left p code",
+                    imageBlockSelector: "img",
+                };
+                manga(params);
+            },
+            manga00: () => {
+                const params = {
+                    nextChapterSelector: ".nvs.rght a",
+                    containerSelector: "#image_manga",
+                    imageBlockSelector: "img",
+                    callback(blockElement, imageElement) {
+                        imageElement.src = imageElement.dataset.cfsrc ?? imageElement.src;
+                    }
+                };
+                manga(params);
+            },
+            niceoppai: () => {
+                const params = {
+                    nextChapterSelector: ".nav_pag .nxt",
+                    containerSelector: "#image-container",
+                    imageBlockSelector: "center",
+                };
+                manga(params);
+            },
+            mangaisekaithai: () => {
+                const params = {
+                    nextChapterSelector: "a.btn.next_page",
+                    containerSelector: ".text-left p",
+                    imageBlockSelector: "img",
+                };
+                manga(params);
+            },
+            mangatitan: () => {
+                const params = {
+                    nextChapterSelector: ".next_page",
+                    containerSelector: ".reading-content",
+                    imageBlockSelector: "page-break no-gaps",
+                    callback(blockElement, imageElement) {
+                        imageElement.src = imageElement.dataset.src ?? imageElement.src;
+                    }
+                };
+                manga(params);
+            },
+            oremanga: () => {
+                const params = {
+                    nextChapterSelector: ".nav-chapter a[rel='next']",
+                    containerSelector: ".reader-area",
+                    imageBlockSelector: "img",
+                };
+                manga(params);
+            },
+            mangadex: () => {
+                const params = {
+                    nextChapterSelector: "a.rounded.relative.md-btn.flex.items-center.px-3.justify-center.text-white.bg-primary.hover:bg-primary-darken.active:bg-primary-darken2.px-4.px-6",
+                    containerSelector: ".md--pages.flex-grow.flex-col>div",
+                    imageBlockSelector: "img",
+                };
+                manga(params);
+            },
         };
     }
     ready(() => {
@@ -115,7 +212,13 @@
             "readmanganato.com": init().readmanganato,
             "365manga.com": init()._365manga,
             "mangauptocats.net": init().mangauptocats,
-            "www.rh2plusmanga.com": init().rh2plusmanga
+            "www.rh2plusmanga.com": init().rh2plusmanga,
+            "manga00.com": init().manga00,
+            "www.niceoppai.net": init().niceoppai,
+            "www.mangaisekaithai.com": init().mangaisekaithai,
+            "manga-titan.com": init().mangatitan,
+            "www.oremanga.net": init().oremanga,
+            "mangadex.org": init().mangadex,
         };
         if (hosts[host]) {
             hosts[host]();
