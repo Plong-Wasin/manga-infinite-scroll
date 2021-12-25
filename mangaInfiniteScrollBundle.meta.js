@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         mangaInfiniteScrollBundle
 // @namespace    https://github.com/plong-wasin
-// @version      0.2
+// @version      0.3
 // @description  Read manga with infinite scroll
 // @author       Plong-Wasin
 // @updateURL    https://github.com/Plong-Wasin/manga-infinite-scroll/raw/main/mangaInfiniteScrollBundle.meta.js

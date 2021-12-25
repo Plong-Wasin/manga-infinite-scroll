@@ -197,7 +197,7 @@ interface nameParameters {
                 const params: nameParameters = {
                     nextChapterSelector: ".next_page",
                     containerSelector: ".reading-content",
-                    imageBlockSelector: "page-break no-gaps",
+                    imageBlockSelector: ".page-break.no-gaps",
                     callback(blockElement, imageElement) {
                         imageElement.src = imageElement.dataset.src??imageElement.src;
                     }
