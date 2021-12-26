@@ -1,7 +1,7 @@
-interface mangaInitObject {
+interface MangaInitObject {
     [key: string]: () => void;
 }
-interface nameParameters {
+interface NameParameters {
     nextChapterSelector: string;
     containerSelector: string;
     imageBlockSelector?: string;
@@ -10,6 +10,7 @@ interface nameParameters {
         imageElement: HTMLImageElement
     ) => void;
 }
+
 (() => {
     function ready(fn: () => void): void {
         if (document.readyState != "loading") {
@@ -23,6 +24,12 @@ interface nameParameters {
     }
     function changeUrl(url: string): void {
         history.pushState(null, "", url);
+    }
+    function loadPage(){
+        const images = document.querySelectorAll<HTMLImageElement>("image[loading='lazy']");
+        for(let i=0;i<images.length&&i<3;i++){
+            images[i].loading="auto";
+        }
     }
     function addEventToImg() {
         const els = document.querySelectorAll<HTMLImageElement>(
@@ -56,7 +63,7 @@ interface nameParameters {
         containerSelector,
         imageBlockSelector = "",
         callback = () => void 0,
-    }: nameParameters): void {
+    }: NameParameters): void {
         const containerEl: HTMLElement | null =
             document.querySelector(containerSelector);
         let loading = false;
@@ -69,8 +76,8 @@ interface nameParameters {
                         !loading &&
                         nextChapterLink &&
                         window.scrollY + window.innerHeight * 2 >
-                            containerEl.offsetTop + containerEl.offsetHeight
-                    ) {
+                        containerEl.offsetTop + containerEl.offsetHeight
+                        ) {
                         loading = true;
                         const res = await fetch(nextChapterLink);
                         const text = await res.text();
@@ -93,6 +100,7 @@ interface nameParameters {
                         div.style.height = `${window.innerHeight}px`;
                         containerEl.appendChild(div);
                         addEventToImg();
+                        loadPage();
                         changeUrl(nextChapterLink);
                         nextChapterEl = doc.querySelector(nextChapterSelector);
                         nextChapterLink = nextChapterEl?.href;
@@ -107,7 +115,7 @@ interface nameParameters {
     function init() {
         return {
             mangakakalot: () => {
-                const params: nameParameters = {
+                const params: NameParameters = {
                     nextChapterSelector: ".btn-navigation-chap .back",
                     containerSelector: ".container-chapter-reader",
                     imageBlockSelector: "img",
@@ -125,7 +133,7 @@ interface nameParameters {
                 manga(params);
             },
             readmanganato: () => {
-                const params: nameParameters = {
+                const params: NameParameters = {
                     nextChapterSelector: ".navi-change-chapter-btn-next",
                     containerSelector: ".container-chapter-reader",
                     imageBlockSelector: "img",
@@ -143,7 +151,7 @@ interface nameParameters {
                 manga(params);
             },
             _365manga: () => {
-                const params: nameParameters = {
+                const params: NameParameters = {
                     nextChapterSelector: ".nav-next a",
                     containerSelector: ".reading-content",
                     imageBlockSelector: ".page-break.no-gaps",
@@ -151,7 +159,7 @@ interface nameParameters {
                 manga(params);
             },
             mangauptocats: () => {
-                const params: nameParameters = {
+                const params: NameParameters = {
                     nextChapterSelector: ".nav-next a",
                     containerSelector: ".reading-content",
                     imageBlockSelector: ".page-break",
@@ -159,7 +167,7 @@ interface nameParameters {
                 manga(params);
             },
             rh2plusmanga: () => {
-                const params: nameParameters = {
+                const params: NameParameters = {
                     nextChapterSelector: ".btn.next_page",
                     containerSelector: ".text-left p code",
                     imageBlockSelector: "img",
@@ -167,7 +175,7 @@ interface nameParameters {
                 manga(params);
             },
             manga00:()=>{
-                const params: nameParameters = {
+                const params: NameParameters = {
                     nextChapterSelector: ".nvs.rght a",
                     containerSelector: "#image_manga",
                     imageBlockSelector: "img",
@@ -178,7 +186,7 @@ interface nameParameters {
                 manga(params);
             },
             niceoppai: () => {
-                const params: nameParameters = {
+                const params: NameParameters = {
                     nextChapterSelector: ".nav_pag .nxt",
                     containerSelector: "#image-container",
                     imageBlockSelector: "center",
@@ -186,7 +194,7 @@ interface nameParameters {
                 manga(params);
             },
             mangaisekaithai:()=>{
-                const params: nameParameters = {
+                const params: NameParameters = {
                     nextChapterSelector: "a.btn.next_page",
                     containerSelector: ".text-left p",
                     imageBlockSelector: "img",
@@ -194,7 +202,7 @@ interface nameParameters {
                 manga(params);
             },
             mangatitan:()=>{
-                const params: nameParameters = {
+                const params: NameParameters = {
                     nextChapterSelector: ".next_page",
                     containerSelector: ".reading-content",
                     imageBlockSelector: ".page-break.no-gaps",
@@ -205,7 +213,7 @@ interface nameParameters {
                 manga(params);
             },
             oremanga:()=>{
-                const params: nameParameters = {
+                const params: NameParameters = {
                     nextChapterSelector: ".nav-chapter a[rel='next']",
                     containerSelector: ".reader-area",
                     imageBlockSelector: "img",
@@ -213,7 +221,7 @@ interface nameParameters {
                 manga(params);
             },
             mangadex:()=>{
-                const params: nameParameters = {
+                const params: NameParameters = {
                     nextChapterSelector: "a.rounded.relative.md-btn.flex.items-center.px-3.justify-center.text-white.bg-primary.hover:bg-primary-darken.active:bg-primary-darken2.px-4.px-6",
                     containerSelector: ".md--pages.flex-grow.flex-col>div",
                     imageBlockSelector: "img",
@@ -225,7 +233,7 @@ interface nameParameters {
     ready(() => {
         const url = new URL(location.href);
         const host = url.host;
-        const hosts: mangaInitObject = {
+        const hosts: MangaInitObject = {
             "mangakakalot.com": init().mangakakalot,
             "readmanganato.com": init().readmanganato,
             "365manga.com": init()._365manga,

@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         mangaInfiniteScrollBundle
 // @namespace    https://github.com/plong-wasin
-// @version      0.2
+// @version      0.4
 // @description  Read manga with infinite scroll
 // @author       Plong-Wasin
-// @updateURL    https://github.com/Plong-Wasin/manga-infinite-scroll/raw/main/mangaInfiniteScrollBundle.meta.js
+// @updateURL    https://github.com/Plong-Wasin/manga-infinite-scroll/raw/main/mangaInfiniteScrollBundle.user.js
 // @downloadURL  https://github.com/Plong-Wasin/manga-infinite-scroll/raw/main/mangaInfiniteScrollBundle.user.js
 // @match        https://*/*
 // @grant        none
@@ -24,6 +24,12 @@
     }
     function changeUrl(url) {
         history.pushState(null, "", url);
+    }
+    function loadPage() {
+        const images = document.querySelectorAll("image[loading='lazy']");
+        for (let i = 0; i < images.length && i < 3; i++) {
+            images[i].loading = "auto";
+        }
     }
     function addEventToImg() {
         const els = document.querySelectorAll('img[loading="lazy"]');
@@ -81,6 +87,7 @@
                         div.style.height = `${window.innerHeight}px`;
                         containerEl.appendChild(div);
                         addEventToImg();
+                        loadPage();
                         changeUrl(nextChapterLink);
                         nextChapterEl = doc.querySelector(nextChapterSelector);
                         nextChapterLink = nextChapterEl?.href;
@@ -179,7 +186,7 @@
                 const params = {
                     nextChapterSelector: ".next_page",
                     containerSelector: ".reading-content",
-                    imageBlockSelector: "page-break no-gaps",
+                    imageBlockSelector: ".page-break.no-gaps",
                     callback(blockElement, imageElement) {
                         imageElement.src = imageElement.dataset.src ?? imageElement.src;
                     }

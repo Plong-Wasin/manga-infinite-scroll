@@ -14,6 +14,12 @@
     function changeUrl(url) {
         history.pushState(null, "", url);
     }
+    function loadPage() {
+        const images = document.querySelectorAll("image[loading='lazy']");
+        for (let i = 0; i < images.length && i < 3; i++) {
+            images[i].loading = "auto";
+        }
+    }
     function addEventToImg() {
         const els = document.querySelectorAll('img[loading="lazy"]');
         if (els.length > 0) {
@@ -70,6 +76,7 @@
                         div.style.height = `${window.innerHeight}px`;
                         containerEl.appendChild(div);
                         addEventToImg();
+                        loadPage();
                         changeUrl(nextChapterLink);
                         nextChapterEl = doc.querySelector(nextChapterSelector);
                         nextChapterLink = nextChapterEl?.href;
