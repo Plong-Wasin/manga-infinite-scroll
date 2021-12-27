@@ -21,6 +21,7 @@
 * [www.manga-titan.com](https://www.manga-titan.com/)
 * [oremanga.com](https://oremanga.com/)
 * [mangadex.org](https://mangadex.org/)
+* [mangadeemak.com](https://mangadeemak.com/)
 
 ## Features
 * Infinite Scroll when reading chapter
