@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         mangaInfiniteScrollBundle
 // @namespace    https://github.com/plong-wasin
-// @version      0.4
+// @version      0.5
 // @description  Read manga with infinite scroll
 // @author       Plong-Wasin
 // @updateURL    https://github.com/Plong-Wasin/manga-infinite-scroll/raw/main/mangaInfiniteScrollBundle.user.js
@@ -45,6 +45,13 @@
                 }
             });
             el.addEventListener("error", function () {
+                const countError = this.dataset.countError || 1;
+                if (countError < 3) {
+                    this.dataset.countError = `${+countError + 1}`;
+                }
+                else {
+                    return;
+                }
                 for (let j = 1; j + index < els.length && j <= 3; j++) {
                     const el = els[j + index];
                     el.loading = "auto";
@@ -209,6 +216,17 @@
                 };
                 manga(params);
             },
+            mangadeemak: () => {
+                const params = {
+                    nextChapterSelector: ".nav-next a",
+                    containerSelector: ".reading-content",
+                    imageBlockSelector: ".page-break.no-gaps",
+                    callback(blockElement, imageElement) {
+                        imageElement.src = imageElement.dataset.src ?? imageElement.src;
+                    }
+                };
+                manga(params);
+            }
         };
     }
     ready(() => {
@@ -226,6 +244,7 @@
             "manga-titan.com": init().mangatitan,
             "www.oremanga.net": init().oremanga,
             "mangadex.org": init().mangadex,
+            "mangadeemak.com": init().mangadeemak,
         };
         if (hosts[host]) {
             hosts[host]();
