@@ -65,6 +65,9 @@
                         window.scrollY + window.innerHeight * 2 >
                             containerEl.offsetTop + containerEl.offsetHeight) {
                         loading = true;
+                        const tempImg = document.createElement("img");
+                        tempImg.style.height = `${window.innerHeight}px`;
+                        containerEl.appendChild(tempImg);
                         const res = await fetch(nextChapterLink);
                         const text = await res.text();
                         const parser = new DOMParser();
@@ -76,19 +79,17 @@
                             callback(divEl, img);
                             if (img) {
                                 img.loading = "lazy";
-                                containerEl.appendChild(img);
+                                containerEl.appendChild(divEl);
                             }
                         }
-                        const div = document.createElement("div");
-                        div.style.height = `${window.innerHeight}px`;
-                        containerEl.appendChild(div);
+                        containerEl.appendChild(tempImg);
                         addEventToImg();
                         loadPage();
                         changeUrl(nextChapterLink);
                         nextChapterEl = doc.querySelector(nextChapterSelector);
                         nextChapterLink = nextChapterEl?.href;
                         await sleep(1000);
-                        div.remove();
+                        tempImg.remove();
                         loading = false;
                     }
                 }
