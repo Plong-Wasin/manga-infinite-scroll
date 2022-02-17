@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         mangaInfiniteScrollBundle
 // @namespace    https://github.com/plong-wasin
-// @version      0.5
+// @version      0.6
 // @description  Read manga with infinite scroll
 // @author       Plong-Wasin
 // @updateURL    https://github.com/Plong-Wasin/manga-infinite-scroll/raw/main/mangaInfiniteScrollBundle.user.js
@@ -227,7 +227,15 @@
                     }
                 };
                 manga(params);
-            }
+            },
+            kingsmanga: () => {
+                const params = {
+                    nextChapterSelector: "[rel='next']:not(.nextpostslink)",
+                    containerSelector: ".post-content",
+                    imageBlockSelector: "img",
+                };
+                manga(params);
+            },
         };
     }
     ready(() => {
@@ -246,6 +254,7 @@
             "www.oremanga.net": init().oremanga,
             "mangadex.org": init().mangadex,
             "mangadeemak.com": init().mangadeemak,
+            "www.kingsmanga.net": init().kingsmanga,
         };
         if (hosts[host]) {
             hosts[host]();

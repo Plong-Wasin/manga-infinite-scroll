@@ -216,7 +216,15 @@
                     }
                 };
                 manga(params);
-            }
+            },
+            kingsmanga: () => {
+                const params = {
+                    nextChapterSelector: "[rel='next']:not(.nextpostslink)",
+                    containerSelector: ".post-content",
+                    imageBlockSelector: "img",
+                };
+                manga(params);
+            },
         };
     }
     ready(() => {
@@ -235,6 +243,7 @@
             "www.oremanga.net": init().oremanga,
             "mangadex.org": init().mangadex,
             "mangadeemak.com": init().mangadeemak,
+            "www.kingsmanga.net": init().kingsmanga,
         };
         if (hosts[host]) {
             hosts[host]();

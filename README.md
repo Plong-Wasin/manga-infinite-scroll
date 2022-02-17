@@ -22,6 +22,7 @@
 * [oremanga.com](https://oremanga.com/)
 * [mangadex.org](https://mangadex.org/)
 * [mangadeemak.com](https://mangadeemak.com/)
+* [www.kingsmanga.net](https://www.kingsmanga.net/)
 
 ## Features
 * Infinite Scroll when reading chapter
