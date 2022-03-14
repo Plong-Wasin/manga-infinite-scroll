@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         mangaInfiniteScrollBundle
 // @namespace    https://github.com/plong-wasin
-// @version      0.6
+// @version      0.6.1
 // @description  Read manga with infinite scroll
 // @author       Plong-Wasin
 // @updateURL    https://github.com/Plong-Wasin/manga-infinite-scroll/raw/main/mangaInfiniteScrollBundle.user.js
@@ -23,7 +23,7 @@
         return new Promise((resolve) => setTimeout(resolve, ms));
     }
     function changeUrl(url) {
-        history.pushState(null, "", url);
+        history.replaceState(null, "", url);
     }
     function loadPage() {
         const images = document.querySelectorAll("image[loading='lazy']");
@@ -96,6 +96,11 @@
                         containerEl.appendChild(tempImg);
                         addEventToImg();
                         loadPage();
+                        const docTitleEl = doc.querySelector("title");
+                        const titleEl = document.querySelector("title");
+                        if (docTitleEl && titleEl) {
+                            titleEl.innerText = docTitleEl.innerText;
+                        }
                         changeUrl(nextChapterLink);
                         nextChapterEl = doc.querySelector(nextChapterSelector);
                         nextChapterLink = nextChapterEl?.href;
@@ -169,8 +174,9 @@
                     containerSelector: "#image_manga",
                     imageBlockSelector: "img",
                     callback(blockElement, imageElement) {
-                        imageElement.src = imageElement.dataset.cfsrc ?? imageElement.src;
-                    }
+                        imageElement.src =
+                            imageElement.dataset.cfsrc ?? imageElement.src;
+                    },
                 };
                 manga(params);
             },
@@ -196,8 +202,9 @@
                     containerSelector: ".reading-content",
                     imageBlockSelector: ".page-break.no-gaps",
                     callback(blockElement, imageElement) {
-                        imageElement.src = imageElement.dataset.src ?? imageElement.src;
-                    }
+                        imageElement.src =
+                            imageElement.dataset.src ?? imageElement.src;
+                    },
                 };
                 manga(params);
             },
@@ -223,8 +230,9 @@
                     containerSelector: ".reading-content",
                     imageBlockSelector: ".page-break.no-gaps",
                     callback(blockElement, imageElement) {
-                        imageElement.src = imageElement.dataset.src ?? imageElement.src;
-                    }
+                        imageElement.src =
+                            imageElement.dataset.src ?? imageElement.src;
+                    },
                 };
                 manga(params);
             },
@@ -233,6 +241,18 @@
                     nextChapterSelector: "[rel='next']:not(.nextpostslink)",
                     containerSelector: ".post-content",
                     imageBlockSelector: "img",
+                };
+                manga(params);
+            },
+            mangaclash: () => {
+                const params = {
+                    nextChapterSelector: ".btn.next_page",
+                    containerSelector: ".reading-content",
+                    imageBlockSelector: ".page-break.no-gaps",
+                    callback(blockElement, imageElement) {
+                        imageElement.src =
+                            imageElement.dataset.src ?? imageElement.src;
+                    },
                 };
                 manga(params);
             },
@@ -255,6 +275,7 @@
             "mangadex.org": init().mangadex,
             "mangadeemak.com": init().mangadeemak,
             "www.kingsmanga.net": init().kingsmanga,
+            "mangaclash.com": init().mangaclash,
         };
         if (hosts[host]) {
             hosts[host]();

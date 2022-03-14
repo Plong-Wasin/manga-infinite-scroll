@@ -23,12 +23,14 @@ interface NameParameters {
         return new Promise((resolve) => setTimeout(resolve, ms));
     }
     function changeUrl(url: string): void {
-        history.pushState(null, "", url);
+        history.replaceState(null, "", url);
     }
-    function loadPage(){
-        const images = document.querySelectorAll<HTMLImageElement>("image[loading='lazy']");
-        for(let i=0;i<images.length&&i<3;i++){
-            images[i].loading="auto";
+    function loadPage() {
+        const images = document.querySelectorAll<HTMLImageElement>(
+            "image[loading='lazy']"
+        );
+        for (let i = 0; i < images.length && i < 3; i++) {
+            images[i].loading = "auto";
         }
     }
     function addEventToImg() {
@@ -50,7 +52,7 @@ interface NameParameters {
                 const countError = this.dataset.countError || 1;
                 if (countError < 3) {
                     this.dataset.countError = `${+countError + 1}`;
-                }else{
+                } else {
                     return;
                 }
                 for (let j = 1; j + index < els.length && j <= 3; j++) {
@@ -73,7 +75,8 @@ interface NameParameters {
         const containerEl: HTMLElement | null =
             document.querySelector(containerSelector);
         let loading = false;
-        let nextChapterEl: HTMLAnchorElement | null = document.querySelector(nextChapterSelector);
+        let nextChapterEl: HTMLAnchorElement | null =
+            document.querySelector(nextChapterSelector);
         let nextChapterLink = nextChapterEl?.href;
         window.addEventListener("scroll", () => {
             void (async () => {
@@ -82,8 +85,8 @@ interface NameParameters {
                         !loading &&
                         nextChapterLink &&
                         window.scrollY + window.innerHeight * 2 >
-                        containerEl.offsetTop + containerEl.offsetHeight
-                        ) {
+                            containerEl.offsetTop + containerEl.offsetHeight
+                    ) {
                         loading = true;
                         const tempImg = document.createElement("img");
                         tempImg.style.height = `${window.innerHeight}px`;
@@ -108,6 +111,11 @@ interface NameParameters {
                         containerEl.appendChild(tempImg);
                         addEventToImg();
                         loadPage();
+                        const docTitleEl = doc.querySelector("title");
+                        const titleEl = document.querySelector("title");
+                        if (docTitleEl && titleEl) {
+                            titleEl.innerText = docTitleEl.innerText;
+                        }
                         changeUrl(nextChapterLink);
                         nextChapterEl = doc.querySelector(nextChapterSelector);
                         nextChapterLink = nextChapterEl?.href;
@@ -181,14 +189,15 @@ interface NameParameters {
                 };
                 manga(params);
             },
-            manga00:()=>{
+            manga00: () => {
                 const params: NameParameters = {
                     nextChapterSelector: ".nvs.rght a",
                     containerSelector: "#image_manga",
                     imageBlockSelector: "img",
                     callback(blockElement, imageElement) {
-                        imageElement.src = imageElement.dataset.cfsrc??imageElement.src;
-                    }
+                        imageElement.src =
+                            imageElement.dataset.cfsrc ?? imageElement.src;
+                    },
                 };
                 manga(params);
             },
@@ -197,53 +206,56 @@ interface NameParameters {
                     nextChapterSelector: ".nav_pag .nxt",
                     containerSelector: "#image-container",
                     imageBlockSelector: "center",
-                }
+                };
                 manga(params);
             },
-            mangaisekaithai:()=>{
+            mangaisekaithai: () => {
                 const params: NameParameters = {
                     nextChapterSelector: "a.btn.next_page",
                     containerSelector: ".text-left p",
                     imageBlockSelector: "img",
-                }
+                };
                 manga(params);
             },
-            mangatitan:()=>{
+            mangatitan: () => {
                 const params: NameParameters = {
                     nextChapterSelector: ".next_page",
                     containerSelector: ".reading-content",
                     imageBlockSelector: ".page-break.no-gaps",
                     callback(blockElement, imageElement) {
-                        imageElement.src = imageElement.dataset.src??imageElement.src;
-                    }
-                }
+                        imageElement.src =
+                            imageElement.dataset.src ?? imageElement.src;
+                    },
+                };
                 manga(params);
             },
-            oremanga:()=>{
+            oremanga: () => {
                 const params: NameParameters = {
                     nextChapterSelector: ".nav-chapter a[rel='next']",
                     containerSelector: ".reader-area",
                     imageBlockSelector: "img",
-                }
+                };
                 manga(params);
             },
-            mangadex:()=>{
+            mangadex: () => {
                 const params: NameParameters = {
-                    nextChapterSelector: "a.rounded.relative.md-btn.flex.items-center.px-3.justify-center.text-white.bg-primary.hover:bg-primary-darken.active:bg-primary-darken2.px-4.px-6",
+                    nextChapterSelector:
+                        "a.rounded.relative.md-btn.flex.items-center.px-3.justify-center.text-white.bg-primary.hover:bg-primary-darken.active:bg-primary-darken2.px-4.px-6",
                     containerSelector: ".md--pages.flex-grow.flex-col>div",
                     imageBlockSelector: "img",
-                }
+                };
                 manga(params);
             },
-            mangadeemak:()=>{
+            mangadeemak: () => {
                 const params: NameParameters = {
                     nextChapterSelector: ".nav-next a",
                     containerSelector: ".reading-content",
                     imageBlockSelector: ".page-break.no-gaps",
                     callback(blockElement, imageElement) {
-                        imageElement.src = imageElement.dataset.src??imageElement.src;
-                    }
-                }
+                        imageElement.src =
+                            imageElement.dataset.src ?? imageElement.src;
+                    },
+                };
                 manga(params);
             },
             kingsmanga: () => {
@@ -251,6 +263,18 @@ interface NameParameters {
                     nextChapterSelector: "[rel='next']:not(.nextpostslink)",
                     containerSelector: ".post-content",
                     imageBlockSelector: "img",
+                };
+                manga(params);
+            },
+            mangaclash: () => {
+                const params = {
+                    nextChapterSelector: ".btn.next_page",
+                    containerSelector: ".reading-content",
+                    imageBlockSelector: ".page-break.no-gaps",
+                    callback(blockElement:HTMLElement, imageElement: HTMLImageElement) {
+                        imageElement.src =
+                            imageElement.dataset.src ?? imageElement.src;
+                    },
                 };
                 manga(params);
             },
@@ -273,6 +297,7 @@ interface NameParameters {
             "mangadex.org": init().mangadex,
             "mangadeemak.com": init().mangadeemak,
             "www.kingsmanga.net": init().kingsmanga,
+            "mangaclash.com": init().mangaclash,
         };
         if (hosts[host]) {
             hosts[host]();
