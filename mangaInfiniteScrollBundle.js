@@ -17,20 +17,20 @@
     function loadPage() {
         const images = document.querySelectorAll("image[loading='lazy']");
         for (let i = 0; i < images.length && i < 3; i++) {
-            images[i].loading = "auto";
+            images[i].loading = "eager";
         }
     }
     function addEventToImg() {
         const els = document.querySelectorAll('img[loading="lazy"]');
         if (els.length > 0) {
             const el = els[els.length - 1];
-            el.loading = "auto";
+            el.loading = "eager";
         }
         els.forEach((el, index) => {
             el.addEventListener("load", () => {
                 for (let j = 1; j + index < els.length && j <= 3; j++) {
                     const el = els[j + index];
-                    el.loading = "auto";
+                    el.loading = "eager";
                 }
             });
             el.addEventListener("error", function () {
@@ -43,7 +43,7 @@
                 }
                 for (let j = 1; j + index < els.length && j <= 3; j++) {
                     const el = els[j + index];
-                    el.loading = "auto";
+                    el.loading = "eager";
                 }
                 setTimeout(() => {
                     const imgSrc = el.src;
@@ -245,6 +245,18 @@
                 };
                 manga(params);
             },
+            catsTranslator: () => {
+                const params = {
+                    nextChapterSelector: ".btn.next_page",
+                    containerSelector: ".reading-content",
+                    imageBlockSelector: ".page-break",
+                    callback(blockElement, imageElement) {
+                        imageElement.src =
+                            imageElement.dataset.src ?? imageElement.src;
+                    },
+                };
+                manga(params);
+            },
         };
     }
     ready(() => {
@@ -265,6 +277,7 @@
             "mangadeemak.com": init().mangadeemak,
             "www.kingsmanga.net": init().kingsmanga,
             "mangaclash.com": init().mangaclash,
+            "cats-translator.com": init().catsTranslator,
         };
         if (hosts[host]) {
             hosts[host]();

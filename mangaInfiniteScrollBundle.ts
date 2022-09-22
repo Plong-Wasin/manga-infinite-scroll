@@ -30,7 +30,7 @@ interface NameParameters {
             "image[loading='lazy']"
         );
         for (let i = 0; i < images.length && i < 3; i++) {
-            images[i].loading = "auto";
+            images[i].loading = "eager";
         }
     }
     function addEventToImg() {
@@ -39,13 +39,13 @@ interface NameParameters {
         );
         if (els.length > 0) {
             const el = els[els.length - 1];
-            el.loading = "auto";
+            el.loading = "eager";
         }
         els.forEach((el, index) => {
             el.addEventListener("load", () => {
                 for (let j = 1; j + index < els.length && j <= 3; j++) {
                     const el = els[j + index];
-                    el.loading = "auto";
+                    el.loading = "eager";
                 }
             });
             el.addEventListener("error", function () {
@@ -57,7 +57,7 @@ interface NameParameters {
                 }
                 for (let j = 1; j + index < els.length && j <= 3; j++) {
                     const el = els[j + index];
-                    el.loading = "auto";
+                    el.loading = "eager";
                 }
                 setTimeout(() => {
                     const imgSrc = el.src;
@@ -271,7 +271,25 @@ interface NameParameters {
                     nextChapterSelector: ".btn.next_page",
                     containerSelector: ".reading-content",
                     imageBlockSelector: ".page-break.no-gaps",
-                    callback(blockElement:HTMLElement, imageElement: HTMLImageElement) {
+                    callback(
+                        blockElement: HTMLElement,
+                        imageElement: HTMLImageElement
+                    ) {
+                        imageElement.src =
+                            imageElement.dataset.src ?? imageElement.src;
+                    },
+                };
+                manga(params);
+            },
+            catsTranslator: () => {
+                const params = {
+                    nextChapterSelector: ".btn.next_page",
+                    containerSelector: ".reading-content",
+                    imageBlockSelector: ".page-break",
+                    callback(
+                        blockElement: HTMLElement,
+                        imageElement: HTMLImageElement
+                    ) {
                         imageElement.src =
                             imageElement.dataset.src ?? imageElement.src;
                     },
@@ -298,6 +316,7 @@ interface NameParameters {
             "mangadeemak.com": init().mangadeemak,
             "www.kingsmanga.net": init().kingsmanga,
             "mangaclash.com": init().mangaclash,
+            "cats-translator.com": init().catsTranslator,
         };
         if (hosts[host]) {
             hosts[host]();
