@@ -296,6 +296,22 @@ interface NameParameters {
                 };
                 manga(params);
             },
+            german66: () => {
+                const params = {
+                    nextChapterSelector: ".rightnav>a",
+                    containerSelector: "div.reader-area > p",
+                    imageBlockSelector: "img",
+                };
+                manga(params);
+            },
+            mangapost: () => {
+                const params = {
+                    nextChapterSelector: ".nav-next > a",
+                    containerSelector: ".reading-content",
+                    imageBlockSelector: ".page-break.no-gaps",
+                };
+                manga(params);
+            },
         };
     }
     ready(() => {
@@ -317,6 +333,9 @@ interface NameParameters {
             "www.kingsmanga.net": init().kingsmanga,
             "mangaclash.com": init().mangaclash,
             "cats-translator.com": init().catsTranslator,
+            "chapmanganato.com": init().readmanganato,
+            "germa-66.com": init().german66,
+            "manga-post.com": init().mangapost,
         };
         if (hosts[host]) {
             hosts[host]();
