@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         mangaInfiniteScrollBundle
 // @namespace    https://github.com/plong-wasin
-// @version      0.9.0
+// @version      0.9.1
 // @description  Read manga with infinite scroll
 // @author       Plong-Wasin
 // @updateURL    https://github.com/Plong-Wasin/manga-infinite-scroll/raw/main/mangaInfiniteScrollBundle.user.js
@@ -313,6 +313,7 @@
             "mangaclash.com": init().mangaclash,
             "cats-translator.com": init().catsTranslator,
             "chapmanganato.com": init().readmanganato,
+            "chapmanganato.to": init().readmanganato,
             "germa-66.com": init().german66,
             "manga-post.com": init().mangapost,
             "kaichan.co": init().kaichan,

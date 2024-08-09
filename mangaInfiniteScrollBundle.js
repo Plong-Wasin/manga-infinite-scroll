@@ -302,6 +302,7 @@
             "mangaclash.com": init().mangaclash,
             "cats-translator.com": init().catsTranslator,
             "chapmanganato.com": init().readmanganato,
+            "chapmanganato.to": init().readmanganato,
             "germa-66.com": init().german66,
             "manga-post.com": init().mangapost,
             "kaichan.co": init().kaichan,
