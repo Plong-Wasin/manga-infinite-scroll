@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         mangaInfiniteScrollBundle
 // @namespace    https://github.com/plong-wasin
-// @version      0.8.0
+// @version      0.9.0
 // @description  Read manga with infinite scroll
 // @author       Plong-Wasin
 // @updateURL    https://github.com/Plong-Wasin/manga-infinite-scroll/raw/main/mangaInfiniteScrollBundle.user.js
@@ -14,7 +14,8 @@
     function ready(fn) {
         if (document.readyState != "loading") {
             fn();
-        } else {
+        }
+        else {
             document.addEventListener("DOMContentLoaded", fn);
         }
     }
@@ -47,7 +48,8 @@
                 const countError = this.dataset.countError || 1;
                 if (countError < 3) {
                     this.dataset.countError = `${+countError + 1}`;
-                } else {
+                }
+                else {
                     return;
                 }
                 for (let j = 1; j + index < els.length && j <= 3; j++) {
@@ -61,12 +63,7 @@
             });
         });
     }
-    function manga({
-        nextChapterSelector,
-        containerSelector,
-        imageBlockSelector = "",
-        callback = () => void 0,
-    }) {
+    function manga({ nextChapterSelector, containerSelector, imageBlockSelector = "", callback = () => void 0, }) {
         const containerEl = document.querySelector(containerSelector);
         let loading = false;
         let nextChapterEl = document.querySelector(nextChapterSelector);
@@ -74,12 +71,10 @@
         window.addEventListener("scroll", () => {
             void (async () => {
                 if (containerEl) {
-                    if (
-                        !loading &&
+                    if (!loading &&
                         nextChapterLink &&
                         window.scrollY + window.innerHeight * 2 >
-                            containerEl.offsetTop + containerEl.offsetHeight
-                    ) {
+                            containerEl.offsetTop + containerEl.offsetHeight) {
                         loading = true;
                         const tempImg = document.createElement("img");
                         tempImg.style.height = `${window.innerHeight}px`;
@@ -88,11 +83,10 @@
                         const text = await res.text();
                         const parser = new DOMParser();
                         const doc = parser.parseFromString(text, "text/html");
-                        const divEls = doc.querySelectorAll(
-                            `${containerSelector} ${imageBlockSelector}`
-                        );
+                        const divEls = doc.querySelectorAll(`${containerSelector} ${imageBlockSelector}`);
                         for (const divEl of divEls) {
-                            const img = divEl.querySelector(`img`) || divEl;
+                            const img = divEl.querySelector(`img`) ||
+                                divEl;
                             callback(divEl, img);
                             if (img) {
                                 img.loading = "lazy";
@@ -126,9 +120,7 @@
                     containerSelector: ".container-chapter-reader",
                     imageBlockSelector: "img",
                     callback(blockElement, imageElement) {
-                        const selectElement = document.querySelector(
-                            ".pn-op-sv-cbb-content-margin"
-                        );
+                        const selectElement = document.querySelector(".pn-op-sv-cbb-content-margin");
                         const selectValue = selectElement?.value;
                         if (selectValue) {
                             imageElement.style.marginTop = `${selectValue}px`;
@@ -143,9 +135,7 @@
                     containerSelector: ".container-chapter-reader",
                     imageBlockSelector: "img",
                     callback(blockElement, imageElement) {
-                        const selectElement = document.querySelector(
-                            ".server-cbb-content-margin"
-                        );
+                        const selectElement = document.querySelector(".server-cbb-content-margin");
                         const selectValue = selectElement?.value;
                         if (selectValue) {
                             imageElement.style.marginTop = `${selectValue}px`;
@@ -184,8 +174,7 @@
                     containerSelector: "#image_manga",
                     imageBlockSelector: "img",
                     callback(blockElement, imageElement) {
-                        imageElement.src =
-                            imageElement.dataset.cfsrc ?? imageElement.src;
+                        imageElement.src = imageElement.dataset.cfsrc ?? imageElement.src;
                     },
                 };
                 manga(params);
@@ -212,8 +201,7 @@
                     containerSelector: ".reading-content",
                     imageBlockSelector: ".page-break.no-gaps",
                     callback(blockElement, imageElement) {
-                        imageElement.src =
-                            imageElement.dataset.src ?? imageElement.src;
+                        imageElement.src = imageElement.dataset.src ?? imageElement.src;
                     },
                 };
                 manga(params);
@@ -228,8 +216,7 @@
             },
             mangadex: () => {
                 const params = {
-                    nextChapterSelector:
-                        "a.rounded.relative.md-btn.flex.items-center.px-3.justify-center.text-white.bg-primary.hover:bg-primary-darken.active:bg-primary-darken2.px-4.px-6",
+                    nextChapterSelector: "a.rounded.relative.md-btn.flex.items-center.px-3.justify-center.text-white.bg-primary.hover:bg-primary-darken.active:bg-primary-darken2.px-4.px-6",
                     containerSelector: ".md--pages.flex-grow.flex-col>div",
                     imageBlockSelector: "img",
                 };
@@ -241,8 +228,7 @@
                     containerSelector: ".reading-content",
                     imageBlockSelector: ".page-break.no-gaps",
                     callback(blockElement, imageElement) {
-                        imageElement.src =
-                            imageElement.dataset.src ?? imageElement.src;
+                        imageElement.src = imageElement.dataset.src ?? imageElement.src;
                     },
                 };
                 manga(params);
@@ -261,8 +247,7 @@
                     containerSelector: ".reading-content",
                     imageBlockSelector: ".page-break.no-gaps",
                     callback(blockElement, imageElement) {
-                        imageElement.src =
-                            imageElement.dataset.src ?? imageElement.src;
+                        imageElement.src = imageElement.dataset.src ?? imageElement.src;
                     },
                 };
                 manga(params);
@@ -273,8 +258,7 @@
                     containerSelector: ".reading-content",
                     imageBlockSelector: ".page-break",
                     callback(blockElement, imageElement) {
-                        imageElement.src =
-                            imageElement.dataset.src ?? imageElement.src;
+                        imageElement.src = imageElement.dataset.src ?? imageElement.src;
                     },
                 };
                 manga(params);
@@ -292,6 +276,18 @@
                     nextChapterSelector: ".nav-next > a",
                     containerSelector: ".reading-content",
                     imageBlockSelector: ".page-break.no-gaps",
+                };
+                manga(params);
+            },
+            kaichan: () => {
+                const params = {
+                    nextChapterSelector: "a.btn.btn-xs.rounded-md:last-child",
+                    containerSelector: ".px-4.py-4.relative",
+                    imageBlockSelector: ".w-full.h-full.flex.justify-center",
+                    callback(blockElement, imageElement) {
+                        imageElement.src = imageElement.dataset.src ?? imageElement.src;
+                        imageElement.loading = "eager";
+                    },
                 };
                 manga(params);
             },
@@ -319,6 +315,7 @@
             "chapmanganato.com": init().readmanganato,
             "germa-66.com": init().german66,
             "manga-post.com": init().mangapost,
+            "kaichan.co": init().kaichan,
         };
         if (hosts[host]) {
             hosts[host]();

@@ -163,8 +163,7 @@
                     containerSelector: "#image_manga",
                     imageBlockSelector: "img",
                     callback(blockElement, imageElement) {
-                        imageElement.src =
-                            imageElement.dataset.cfsrc ?? imageElement.src;
+                        imageElement.src = imageElement.dataset.cfsrc ?? imageElement.src;
                     },
                 };
                 manga(params);
@@ -191,8 +190,7 @@
                     containerSelector: ".reading-content",
                     imageBlockSelector: ".page-break.no-gaps",
                     callback(blockElement, imageElement) {
-                        imageElement.src =
-                            imageElement.dataset.src ?? imageElement.src;
+                        imageElement.src = imageElement.dataset.src ?? imageElement.src;
                     },
                 };
                 manga(params);
@@ -219,8 +217,7 @@
                     containerSelector: ".reading-content",
                     imageBlockSelector: ".page-break.no-gaps",
                     callback(blockElement, imageElement) {
-                        imageElement.src =
-                            imageElement.dataset.src ?? imageElement.src;
+                        imageElement.src = imageElement.dataset.src ?? imageElement.src;
                     },
                 };
                 manga(params);
@@ -239,8 +236,7 @@
                     containerSelector: ".reading-content",
                     imageBlockSelector: ".page-break.no-gaps",
                     callback(blockElement, imageElement) {
-                        imageElement.src =
-                            imageElement.dataset.src ?? imageElement.src;
+                        imageElement.src = imageElement.dataset.src ?? imageElement.src;
                     },
                 };
                 manga(params);
@@ -251,8 +247,7 @@
                     containerSelector: ".reading-content",
                     imageBlockSelector: ".page-break",
                     callback(blockElement, imageElement) {
-                        imageElement.src =
-                            imageElement.dataset.src ?? imageElement.src;
+                        imageElement.src = imageElement.dataset.src ?? imageElement.src;
                     },
                 };
                 manga(params);
@@ -270,6 +265,18 @@
                     nextChapterSelector: ".nav-next > a",
                     containerSelector: ".reading-content",
                     imageBlockSelector: ".page-break.no-gaps",
+                };
+                manga(params);
+            },
+            kaichan: () => {
+                const params = {
+                    nextChapterSelector: "a.btn.btn-xs.rounded-md:last-child",
+                    containerSelector: ".px-4.py-4.relative",
+                    imageBlockSelector: ".w-full.h-full.flex.justify-center",
+                    callback(blockElement, imageElement) {
+                        imageElement.src = imageElement.dataset.src ?? imageElement.src;
+                        imageElement.loading = "eager";
+                    },
                 };
                 manga(params);
             },
@@ -297,6 +304,7 @@
             "chapmanganato.com": init().readmanganato,
             "germa-66.com": init().german66,
             "manga-post.com": init().mangapost,
+            "kaichan.co": init().kaichan,
         };
         if (hosts[host]) {
             hosts[host]();
