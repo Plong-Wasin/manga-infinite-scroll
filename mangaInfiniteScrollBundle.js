@@ -35,7 +35,7 @@
             });
             el.addEventListener("error", function () {
                 const countError = this.dataset.countError || 1;
-                if (countError < 3) {
+                if (+countError < 3) {
                     this.dataset.countError = `${+countError + 1}`;
                 }
                 else {
@@ -198,7 +198,7 @@
             oremanga: () => {
                 const params = {
                     nextChapterSelector: ".nav-chapter a[rel='next']",
-                    containerSelector: ".reader-area",
+                    containerSelector: ".reader-area-main",
                     imageBlockSelector: "img",
                 };
                 manga(params);
