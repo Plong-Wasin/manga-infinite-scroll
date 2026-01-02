@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         mangaInfiniteScrollBundle
 // @namespace    https://github.com/plong-wasin
-// @version      0.9.2
+// @version      0.9.3
 // @description  Read manga with infinite scroll
 // @author       Plong-Wasin
 // @updateURL    https://github.com/Plong-Wasin/manga-infinite-scroll/raw/main/mangaInfiniteScrollBundle.user.js
@@ -184,6 +184,17 @@
                     nextChapterSelector: ".nav_pag .nxt",
                     containerSelector: "#image-container",
                     imageBlockSelector: "center",
+                    callback(blockElement, imageElement) {
+                        setTimeout(() => {
+                            const scriptElements = blockElement.querySelectorAll("script");
+                            scriptElements.forEach((scriptEl) => {
+                                const newScript = document.createElement("script");
+                                newScript.textContent = scriptEl.textContent;
+                                document.body.appendChild(newScript);
+                                scriptEl.remove();
+                            });
+                        }, 0);
+                    },
                 };
                 manga(params);
             },
@@ -210,7 +221,15 @@
                 const params = {
                     nextChapterSelector: ".nav-chapter a[rel='next']",
                     containerSelector: ".reader-area-main",
-                    imageBlockSelector: "img",
+                    imageBlockSelector: "img, canvas, script",
+                    callback(blockElement, imageElement) {
+                        if (blockElement.tagName === "SCRIPT") {
+                            const newScript = document.createElement("script");
+                            newScript.textContent = blockElement.textContent;
+                            document.body.appendChild(newScript);
+                            blockElement.remove();
+                        }
+                    },
                 };
                 manga(params);
             },
@@ -323,3 +342,4 @@
         }
     });
 })();
+

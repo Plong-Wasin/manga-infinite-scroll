@@ -203,6 +203,18 @@ interface NameParameters {
           nextChapterSelector: ".nav_pag .nxt",
           containerSelector: "#image-container",
           imageBlockSelector: "center",
+          callback(blockElement, imageElement) {
+            setTimeout(() => {
+              const scriptElements =
+                blockElement.querySelectorAll<HTMLScriptElement>("script");
+              scriptElements.forEach((scriptEl) => {
+                const newScript = document.createElement("script");
+                newScript.textContent = scriptEl.textContent;
+                document.body.appendChild(newScript);
+                scriptEl.remove();
+              });
+            }, 0);
+          },
         };
         manga(params);
       },
@@ -229,7 +241,15 @@ interface NameParameters {
         const params: NameParameters = {
           nextChapterSelector: ".nav-chapter a[rel='next']",
           containerSelector: ".reader-area-main",
-          imageBlockSelector: "img",
+          imageBlockSelector: "img, canvas, script",
+          callback(blockElement, imageElement) {
+            if (blockElement.tagName === "SCRIPT") {
+              const newScript = document.createElement("script");
+              newScript.textContent = blockElement.textContent;
+              document.body.appendChild(newScript);
+              blockElement.remove();
+            }
+          },
         };
         manga(params);
       },
